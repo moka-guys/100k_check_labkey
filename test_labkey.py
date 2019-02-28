@@ -2,7 +2,7 @@
 import pytest
 from . import LabKey
 
-# Read test patient data
+# Read test patient data from file. first line = gel participant id, second line = dob (dd/mm/yyyy), third line = nhs number
 with open('test_data.txt') as f:
     PID, DOB, NHSID = [ line.rstrip('\n') for line in f.readlines() ]
 # Read authentication data
