@@ -60,6 +60,13 @@ class LabKey_HTTP():
         URL = ("https://gmc.genomicsengland.nhs.uk/labkey/query/Genomics England Portal/"
             "South London/MeRCURy/Rare Diseases/Core/selectRows.api")
         # Define payload. query.columns filters data for PID.
+        # Columns returned are: 
+        # participant_id = GeL participant ID
+        # person_identifier = NHS number
+        # date_of_birth = date of birth
+        # forenames = Forenames
+        # surname = Surname
+        # person_identifier_type = A text description of the person identifier (nhsNumber)
         payload = {'schemaName': 'gel_rare_diseases', 'query.queryName': 'participant_identifier', 
             'query.columns': 'participant_id,person_identifier,date_of_birth,forenames,surname,person_identifier_type',
             'query.participant_id~eq': self.PID}
