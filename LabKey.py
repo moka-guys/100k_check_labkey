@@ -71,14 +71,14 @@ class LabKey_HTTP():
             'query.columns': 'participant_id,person_identifier,date_of_birth,forenames,surname,person_identifier_type',
             'query.participant_id~eq': self.PID}
         # Make API call with auth credentials if provided.
-        if self.uname or self.pwd:
+        if self.uname and self.pwd:
             response_json = requests.get(URL, params=payload, auth=(self.uname, self.pwd)).json()
         else:
             response_json = requests.get(URL, params=payload).json()
 
         # Raise error if more or less than one participant is matched by the PID. This is because PIDs are unique.
         if response_json['rowCount'] != 1:
-            raise IndexError('More/less than one row returned for participant ID {}'.format(self.PID))
+            raise IndexError(f"Expected 1 row but {response_json['rowCount']} returned from labkey for participant ID {self.PID}")
         return(response_json)
     
     def print_data(self):
@@ -89,17 +89,18 @@ class LabKey_HTTP():
 
 def main():
     # Parse PID from arguments
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(
+        description='Returns patient details from LabKey for a given Genomics England participant ID. '
+        'If username and/or password are not provided credentials will be taken from .netrc '
+        'https://www.labkey.org/Documentation/wiki-page.view?name=netrc&_docid=wiki%3A32d70bfc-ed56-1034-b734-fe851e088836'
+        )
     parser.add_argument('-i', '--pid', required=True, help="A Genomics England participant ID")
     parser.add_argument('-u', '--username', help="A Genomics England LabKey username")
     parser.add_argument('-p', '--password', help="A Genomics England LabKey password")
     parsed_args = parser.parse_args()
 
     # Call LabKey_HTTP() with Participant ID
-    if parsed_args.username or parsed_args.password:
-        lk_obj = LabKey_HTTP(parsed_args.pid, parsed_args.username, parsed_args.password)
-    else:
-        lk_obj = LabKey_HTTP(parsed_args.pid)
+    lk_obj = LabKey_HTTP(parsed_args.pid, parsed_args.username, parsed_args.password)
 
     # Print JSON result to console
     lk_obj.print_details()
