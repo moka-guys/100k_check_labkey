@@ -80,12 +80,6 @@ class LabKey_HTTP():
         if response_json['rowCount'] != 1:
             raise IndexError(f"Expected 1 row but {response_json['rowCount']} returned from labkey for participant ID {self.PID}")
         return(response_json)
-    
-    def print_data(self):
-        print(self.data, end="")
-
-    def print_details(self):
-        print(",".join([self.name, self.dob, self.nhsid]), end="")
 
 def main():
     # Parse PID from arguments
@@ -103,7 +97,7 @@ def main():
     lk_obj = LabKey_HTTP(parsed_args.pid, parsed_args.username, parsed_args.password)
 
     # Print JSON result to console
-    lk_obj.print_details()
+    print(",".join([lk_obj.name, lk_obj.dob, lk_obj.nhsid]), end="")
 
 if __name__ == "__main__":
     main()
