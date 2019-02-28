@@ -1,0 +1,3 @@
+machine gmc.genomicsengland.nhs.uk
+login <labkey_username>
+password <labkey_password>
